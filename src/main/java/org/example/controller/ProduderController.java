@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQLocalRequestCallback;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.example.domain.entity.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RestController
 @Slf4j
 public class ProduderController {
-    @Resource
+    @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
     AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -44,7 +44,8 @@ public class ProduderController {
             // 同步发送需要在方法的参数中指明返回值类型
             //rocketMQTemplate.sendAndReceive("task-topic", MessageBuilder.withPayload(task).build(), String.class);
 
-            // 异步发送request并且等待User类型的返回值
+            // 异步发送request并且等待User类型的返回值;
+            // timeout需要根据业务设置，5S肯定是不够的，默认我设置成1个小时
             rocketMQTemplate.sendAndReceive("task-topic", task, new RocketMQLocalRequestCallback<String>() {
 
                 @Override
@@ -62,9 +63,10 @@ public class ProduderController {
 
                 @Override
                 public void onException(Throwable e) {
+                    //响应异常需要处理
                     e.printStackTrace();
                 }
-            }, 5000);
+            }, 3600000);
         }
     }
 
