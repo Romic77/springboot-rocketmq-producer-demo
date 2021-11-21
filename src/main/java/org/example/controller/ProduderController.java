@@ -45,7 +45,7 @@ public class ProduderController {
             //rocketMQTemplate.sendAndReceive("task-topic", MessageBuilder.withPayload(task).build(), String.class);
 
             // 异步发送request并且等待User类型的返回值;
-            // timeout需要根据业务设置，5S肯定是不够的，默认我设置成1个小时
+            // timeout需要根据业务设置，5S肯定是不够的，默认设置成1个小时
             rocketMQTemplate.sendAndReceive("task-topic", task, new RocketMQLocalRequestCallback<String>() {
 
                 @Override
@@ -72,7 +72,7 @@ public class ProduderController {
 
     /**
      * 批量下发被叫号码 - 减少rocketmq 创建链接的开销
-     * 1.第一个被叫号码2秒挂掉，需要等到第100个号码 可能是1个小时之后才能响应回复给生产者下发100任务，不满足业务场景
+     * 问题：第一个被叫号码2秒挂掉，需要等到第100个号码 可能是1个小时之后才能响应回复给生产者下发100任务，不满足业务场景
      *
      * @return void
      * @author romic
