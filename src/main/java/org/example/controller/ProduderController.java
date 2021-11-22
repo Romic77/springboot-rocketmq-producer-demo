@@ -38,6 +38,7 @@ public class ProduderController {
         // 默认使用同步发送, 但拿不到回执, 源码见下文org.apache.rocketmq.spring.core.RocketMQTemplate.doSent
         // 单个被叫号码下发-得到单个号码消费完的状态
         for (int i = 0; i < 100; i++) {
+            //任务初始化
             Task task = new Task(i, 150, getTel(), "400200100");
 
             //普通消息
