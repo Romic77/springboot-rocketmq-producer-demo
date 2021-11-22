@@ -21,6 +21,9 @@ public class ProduderController {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
+    /**
+     * 轮次控制
+     */
     AtomicInteger atomicInteger = new AtomicInteger(0);
 
     /**
